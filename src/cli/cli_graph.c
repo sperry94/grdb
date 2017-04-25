@@ -7,6 +7,7 @@
 #include "graph.h"
 
 void cli_graph_new(char *cmdline, int *pos);
+void cli_graph_import(char *cmdline, int *pos);
 void cli_graph_edge(char *cmdline, int *pos);
 void cli_graph_schema(char *cmdline, int *pos);
 void cli_graph_tuple(char *cmdline, int *pos);
@@ -39,6 +40,9 @@ cli_graph(char *cmdline, int *pos)
 
 	if (strcmp(s, "new") == 0 || strcmp(s, "n") == 0)
 		cli_graph_new(cmdline, pos);
+
+	else if (strcmp(s, "import") == 0 || strcmp(s, "i") == 0)
+		cli_graph_import(cmdline, pos);
 
 	else if (strcmp(s, "edge") == 0 || strcmp(s, "e") == 0)
 		cli_graph_edge(cmdline, pos);
