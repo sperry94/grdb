@@ -51,9 +51,9 @@ nextarg(char *ln, int *pos, char *sep, char *arg)
 
 	s = arg;
 
-	/* Skip whitespace */
+	/* Skip whitespace and sep*/
 	ch = ln[*pos];
-	while (isspace(ch))
+	while (isspace(ch) || issep(sep, ch))
 		ch = ln[++(*pos)];
 
 	/* Fill in arg until a separator is reached */
