@@ -5,7 +5,7 @@
 #include "cli.h"
 #include "cli_import.h"
 
-void cli_graph_import_tuples_edge(char* fl, int* pos, int s_id, edge_t e);
+void cli_graph_import_tuples(char* fl, int* pos, int s_id, tuple_t* tuple);
 
 void
 cli_graph_import_edge(char* fl, int* pos, graph_t* r_g)
@@ -25,14 +25,14 @@ cli_graph_import_edge(char* fl, int* pos, graph_t* r_g)
 	memset(s_id, 0, BUFSIZE);
 	nextarg(fl, pos, DEF_SEP, s_id);
 
-	edge_t edge = (edge_t)malloc(sizeof(struct vertex));
+	edge_t edge = (edge_t)malloc(sizeof(struct edge));
 	edge_init(edge);
 	edge->id1 = strtoll(id1, NULL, 10);
 	edge->id2 = strtoll(id2, NULL, 10);
 
 	//collect tuple values if schema is specified
 	if(strcmp(s_id, "N") != 0)
-		cli_graph_import_tuples_edge(fl, pos, strtol(s_id, NULL, 10), edge);
+		cli_graph_import_tuples(fl, pos, strtol(s_id, NULL, 10), &(edge->tuple));
 
 	graph_insert_edge(*r_g, edge);
 }

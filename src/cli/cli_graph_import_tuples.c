@@ -8,8 +8,14 @@
 schema_t* cli_graph_import_schema_find_by_id(int s_id);
 
 void
-cli_graph_import_tuples(char* fl, int* pos, schema_t s, tuple_t tuple)
+cli_graph_import_tuples(char* fl, int* pos, int s_id, tuple_t* tuple)
 {
+	schema_t* s = cli_graph_import_schema_find_by_id(s_id);
+	if(*tuple == NULL)
+		*tuple = (tuple_t)malloc(sizeof(struct tuple));
+
+	tuple_init(*tuple, *s);
+
 	//collect field name
 	char n[ATTR_NAME_MAXLEN];
 	memset(n, 0, ATTR_NAME_MAXLEN);
@@ -24,9 +30,22 @@ cli_graph_import_tuples(char* fl, int* pos, schema_t s, tuple_t tuple)
 	{
 		printf("%s - %s: ", n, v);
 
-		base_types_t bt = schema_find_type_by_name(s, n);
+		base_types_t bt = schema_find_type_by_name(*s, n);
 
-		tuple_set(tuple, n, v);
+		char fv[BUFSIZE];
+		memset(fv, 0, BUFSIZE);
+		if(bt == VARCHAR)
+		{
+			char* open = strchr(v, '"');
+			char* close = strchr(open + 1, '"');
+			strncpy(fv, open + 1, close - open - 1);
+		}
+		else
+		{
+			strncpy(fv, v, BUFSIZE - 1);
+		}
+
+		tuple_set(*tuple, n, v);
 
 		printf("%d\n", bt);
 
@@ -36,30 +55,6 @@ cli_graph_import_tuples(char* fl, int* pos, schema_t s, tuple_t tuple)
 
 		//collect field value
 		memset(v, 0, BUFSIZE);
-		nextarg(fl, pos, ITEM_SEP, v);
+		nextarg(fl, pos, FIELD_SEP, v);
 	}
-}
-
-void
-cli_graph_import_tuples_vertex(char* fl, int* pos, int s_id, vertex_t v)
-{
-	schema_t* s = cli_graph_import_schema_find_by_id(s_id);
-
-	v->tuple = (tuple_t)malloc(sizeof(struct tuple));
-
-	tuple_init(v->tuple, *s);
-
-	cli_graph_import_tuples(fl, pos, *s, v->tuple);
-}
-
-void
-cli_graph_import_tuples_edge(char* fl, int* pos, int s_id, edge_t e)
-{
-	schema_t* s = cli_graph_import_schema_find_by_id(s_id);
-
-	e->tuple = (tuple_t)malloc(sizeof(struct tuple));
-
-	tuple_init(e->tuple, *s);
-
-	//cli_graph_import_tuples(fl, pos, *s, e->tuple);
 }

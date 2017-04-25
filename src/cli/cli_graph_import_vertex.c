@@ -5,7 +5,7 @@
 #include "cli.h"
 #include "cli_import.h"
 
-void cli_graph_import_tuples_vertex(char* fl, int* pos, int s_id, vertex_t v);
+void cli_graph_import_tuples(char* fl, int* pos, int s_id, tuple_t* tuple);
 
 void
 cli_graph_import_vertex(char* fl, int* pos, graph_t* r_g)
@@ -28,7 +28,7 @@ cli_graph_import_vertex(char* fl, int* pos, graph_t* r_g)
 
 	//collect tuple values if schema is specified
 	if(strcmp(s_id, "N") != 0)
-		cli_graph_import_tuples_vertex(fl, pos, strtol(s_id, NULL, 10), vertex);
+		cli_graph_import_tuples(fl, pos, strtol(s_id, NULL, 10), &(vertex->tuple));
 
 	graph_insert_vertex(*r_g, vertex);
 
