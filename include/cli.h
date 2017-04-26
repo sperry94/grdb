@@ -15,6 +15,7 @@ typedef enum schema_type schema_type_t;
 extern graph_t graphs, current;
 
 void nextarg(char *ln, int *pos, char *sep, char *arg);
+void nextarg_quotes(char *ln, int *pos, char *sep, char *arg);
 
 void cli_enum(char *cmdline, int *pos);
 void cli_graph(char *cmdline, int *pos);

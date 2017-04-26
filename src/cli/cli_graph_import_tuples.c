@@ -28,8 +28,6 @@ cli_graph_import_tuples(char* fl, int* pos, int s_id, tuple_t* tuple)
 
 	while(strlen(n) > 0 && strlen(v) > 0)
 	{
-		printf("%s - %s: ", n, v);
-
 		base_types_t bt = schema_find_type_by_name(*s, n);
 
 		char fv[BUFSIZE];
@@ -47,14 +45,12 @@ cli_graph_import_tuples(char* fl, int* pos, int s_id, tuple_t* tuple)
 
 		tuple_set(*tuple, n, v);
 
-		printf("%d\n", bt);
-
 		//collect field name
 		memset(n, 0, ATTR_NAME_MAXLEN);
 		nextarg(fl, pos, ITEM_SEP, n);
 
 		//collect field value
 		memset(v, 0, BUFSIZE);
-		nextarg(fl, pos, FIELD_SEP, v);
+		nextarg(fl, pos, ITEM_SEP, v);
 	}
 }

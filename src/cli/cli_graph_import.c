@@ -69,5 +69,6 @@ cli_graph_import(char* cmdline, int* pos)
 
 	graph_print(r_g, 1);
 	printf("\n");
-	cli_graph_import_schema_print_list();
+
+	//convert graph to normal form
 }
