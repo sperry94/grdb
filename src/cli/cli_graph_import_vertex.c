@@ -32,7 +32,4 @@ cli_graph_import_vertex(char* fl, int* pos, graph_t r_g)
 		cli_graph_import_tuples(fl, pos, strtol(s_id, NULL, 10), vertex->tuple);
 
 	graph_insert_vertex(r_g, vertex);
-
-	graph_print(r_g, 1);
-	printf("\n\n");
 }

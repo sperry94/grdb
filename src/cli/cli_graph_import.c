@@ -74,7 +74,7 @@ cli_graph_import(char* cmdline, int* pos)
 
 	cli_graph_import_schema_print_list(s_list);
 
-	graph_t norm = (graph_t)malloc(sizeof(struct graph));
+	/*graph_t norm = (graph_t)malloc(sizeof(struct graph));
 	graph_init(norm);
-	graph_normalize(r_g, norm);
+	graph_normalize(r_g, norm);*/
 }

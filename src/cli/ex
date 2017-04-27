@@ -13,4 +13,5 @@ g 1
 g t
 g s
 g ex out.grdb
+g i out.grdb
 quit

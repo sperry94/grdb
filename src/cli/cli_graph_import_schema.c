@@ -92,5 +92,15 @@ cli_graph_import_schema(char* fl, int* pos)
 		nextarg(fl, pos, ITEM_SEP, n);
 	}
 
+	if(s_list == NULL)
+	{
+		s_list = (schema_list_t*)malloc(sizeof(struct schema_list));
+		memset(s_list, 0, sizeof(struct schema_list));
+
+		s_list->s_id = strtol(id, NULL, 10);
+		s_list->s = schema;
+		return;
+	}
+
 	cli_graph_import_schema_insert(s_list, schema, strtol(id, NULL, 10));
 }
