@@ -5,11 +5,11 @@ LIBDIRS = -L../db
 OBJS =	bufdump.o 			\
 	cli.o				\
 	cli_enum.o			\
+	cli_export_mappings.o		\
 	cli_graph.o			\
 	cli_graph_edge.o		\
 	cli_graph_new.o			\
 	cli_graph_export.o		\
-	cli_graph_export_mappings.o		\
 	cli_graph_import.o		\
 	cli_graph_import_edge.o		\
 	cli_graph_import_schema.o		\

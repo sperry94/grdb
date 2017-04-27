@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cli.h"
-#include "cli_import.h"
+#include "cli_nf.h"
 
 schema_t cli_graph_import_schema_find_by_id(int s_id);
 

@@ -13,21 +13,21 @@ struct schema_list {
 	struct schema_list* next;
 };
 
-struct vtx_schema_map_list {
-	vertexid_t id;
+struct v_s_map {
+	vertexid_t v_id;
 	int s_id;
-	struct vtx_schema_map_list* next;
+	struct v_s_map* next;
 };
 
-struct edg_schema_map_list {
-	vertexid_t id1, id2;
+struct e_s_map {
+	vertexid_t e_id1, e_id2;
 	int s_id;
-	struct edg_schema_map_list* next;
+	struct e_s_map* next;
 };
 
 typedef struct schema_list schema_list_t;
-typedef struct vtx_schema_map_list* vtx_schema_map_list_t;
-typedef struct edg_schema_map_list* edg_schema_map_list_t;
+typedef struct v_s_map* v_s_map_t;
+typedef struct e_s_map* e_s_map_t;
 
 schema_list_t* s_list;
 

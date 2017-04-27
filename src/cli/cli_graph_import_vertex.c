@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cli.h"
-#include "cli_import.h"
+#include "cli_nf.h"
 
 void cli_graph_import_tuples(char* fl, int* pos, int s_id, tuple_t tuple);
 

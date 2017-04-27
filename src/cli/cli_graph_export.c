@@ -3,23 +3,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cli.h"
-#include "cli_import.h"
+#include "cli_nf.h"
 
 void cli_graph_import_schema_print_list(schema_list_t* s_list);
 void cli_graph_import_schema_insert(schema_list_t* s_list,
   schema_t schema, int s_id);
 
-void cli_graph_export_mappings_print_vtx(vtx_schema_map_list_t vtx_maps);
-void cli_graph_export_mappings_insert_vtx(vtx_schema_map_list_t vtx_maps,
-  vertexid_t v_id, int s_id);
-vtx_schema_map_list_t cli_graph_export_mappings_vtx_lookup(vtx_schema_map_list_t vtx_maps,
+void cli_export_map_print_vtx(v_s_map_t vtx_maps);
+v_s_map_t cli_export_map_find_vtx(v_s_map_t vtx_maps,
   vertexid_t v_id);
+void cli_export_mappings_insert_vtx(v_s_map_t vtx_maps,
+  vertexid_t v_id, int s_id);
 
-void cli_graph_export_mappings_print_edg(edg_schema_map_list_t edg_maps);
-void cli_graph_export_mappings_insert_edg(edg_schema_map_list_t edg_maps,
-  vertexid_t e_id1, vertexid_t e_id2, int s_id);
-edg_schema_map_list_t cli_graph_export_mappings_edg_lookup(edg_schema_map_list_t edg_maps,
+void cli_export_map_print_edg(e_s_map_t edg_maps);
+e_s_map_t cli_export_map_find_edg(e_s_map_t edg_maps,
   vertexid_t e_id1, vertexid_t e_id2);
+void cli_export_mappings_insert_edg(e_s_map_t edg_maps,
+  vertexid_t e_id1, vertexid_t e_id2, int s_id);
 
 void cli_graph_export_print_tuples(tuple_t t, FILE* out)
 {
@@ -161,8 +161,8 @@ cli_graph_export(char *cmdline, int *pos)
   schema_list_t* s_list = (schema_list_t*)malloc(sizeof(struct schema_list));
   memset(s_list, 0, sizeof(struct schema_list));
 
-  vtx_schema_map_list_t vtx_maps = NULL;
-  edg_schema_map_list_t edg_maps = NULL;
+  v_s_map_t vtx_maps = NULL;
+  e_s_map_t edg_maps = NULL;
 
   // add schemas to list
   for(vertex_t v=cg->v; v != NULL; v=v->next)
@@ -181,16 +181,16 @@ cli_graph_export(char *cmdline, int *pos)
       cli_graph_import_schema_insert(s_list, v->tuple->s, s_id);
       if(vtx_maps == NULL)
       {
-        vtx_maps = (vtx_schema_map_list_t)
-          malloc(sizeof(struct vtx_schema_map_list));
-        memset(vtx_maps, 0, sizeof(struct vtx_schema_map_list));
+        vtx_maps = (v_s_map_t)
+          malloc(sizeof(struct v_s_map));
+        memset(vtx_maps, 0, sizeof(struct v_s_map));
 
-        vtx_maps->id = v->id;
+        vtx_maps->v_id = v->id;
         vtx_maps->s_id = s_id;
       }
       else
       {
-        cli_graph_export_mappings_insert_vtx(vtx_maps, v->id, s_id);
+        cli_export_mappings_insert_vtx(vtx_maps, v->id, s_id);
       }
       ++s_id;
     }
@@ -212,17 +212,17 @@ cli_graph_export(char *cmdline, int *pos)
       cli_graph_import_schema_insert(s_list, e->tuple->s, s_id);
       if(edg_maps == NULL)
       {
-        edg_maps = (edg_schema_map_list_t)
-          malloc(sizeof(struct edg_schema_map_list));
-        memset(edg_maps, 0, sizeof(struct edg_schema_map_list));
+        edg_maps = (e_s_map_t)
+          malloc(sizeof(struct e_s_map));
+        memset(edg_maps, 0, sizeof(struct e_s_map));
 
-        edg_maps->id1 = e->id1;
-        edg_maps->id2 = e->id2;
+        edg_maps->e_id1 = e->id1;
+        edg_maps->e_id2 = e->id2;
         edg_maps->s_id = s_id;
       }
       else
       {
-        cli_graph_export_mappings_insert_edg(edg_maps, e->id1, e->id2, s_id);
+        cli_export_mappings_insert_edg(edg_maps, e->id1, e->id2, s_id);
       }
       ++s_id;
     }
@@ -249,8 +249,8 @@ cli_graph_export(char *cmdline, int *pos)
 
   for(vertex_t v=cg->v; v != NULL; v=v->next)
   {
-    vtx_schema_map_list_t vm =
-      cli_graph_export_mappings_vtx_lookup(vtx_maps, v->id);
+    v_s_map_t vm =
+      cli_export_map_find_vtx(vtx_maps, v->id);
     fprintf(fd, "V %llu %d", v->id, vm->s_id);
 
     cli_graph_export_print_tuples(v->tuple, fd);
@@ -261,8 +261,8 @@ cli_graph_export(char *cmdline, int *pos)
     char el[BUFSIZE];
     memset(el, 0, BUFSIZE);
 
-    edg_schema_map_list_t em =
-      cli_graph_export_mappings_edg_lookup(edg_maps, e->id1, e->id2);
+    e_s_map_t em =
+      cli_export_map_find_edg(edg_maps, e->id1, e->id2);
     fprintf(fd, "E %llu:%llu %d", e->id1, e->id2, em->s_id);
 
     cli_graph_export_print_tuples(e->tuple, fd);
