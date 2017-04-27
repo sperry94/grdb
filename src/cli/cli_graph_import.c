@@ -5,15 +5,17 @@
 #include "cli.h"
 #include "cli_import.h"
 
-void cli_graph_import_edge(char* fl, int* pos, graph_t* r_g);
+void cli_graph_import_edge(char* fl, int* pos, graph_t r_g);
 
 void cli_graph_import_schema(char* fl, int* pos);
-void cli_graph_import_schema_print_list();
+void cli_graph_import_schema_print_list(schema_list_t* s_list);
 
-void cli_graph_import_vertex(char* fl, int* pos, graph_t* r_g);
+void cli_graph_import_vertex(char* fl, int* pos, graph_t r_g);
+
+void graph_normalize(graph_t in, graph_t out);
 
 void
-cli_graph_import_line(char* fl, graph_t* r_g)
+cli_graph_import_line(char* fl, graph_t r_g)
 {
 	char t[BUFSIZE];
 	memset(t, 0, BUFSIZE);
@@ -58,7 +60,7 @@ cli_graph_import(char* cmdline, int* pos)
 
 	while(fgets(fl, BUFSIZE, fd) != NULL)
 	{
-		cli_graph_import_line(fl, &r_g);
+		cli_graph_import_line(fl, r_g);
 		memset(fl, 0, BUFSIZE);
 	}
 
@@ -70,5 +72,9 @@ cli_graph_import(char* cmdline, int* pos)
 	graph_print(r_g, 1);
 	printf("\n");
 
-	//convert graph to normal form
+	cli_graph_import_schema_print_list(s_list);
+
+	graph_t norm = (graph_t)malloc(sizeof(struct graph));
+	graph_init(norm);
+	graph_normalize(r_g, norm);
 }

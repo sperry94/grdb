@@ -1,0 +1,16 @@
+g n
+g e 1 2
+g s e char i
+g s v bool k
+g n
+g 1
+g e 1 3
+g s e int j
+g s v char t
+g 0
+g t
+g 1
+g t
+g s
+g ex
+quit

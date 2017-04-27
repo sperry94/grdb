@@ -5,10 +5,10 @@
 #include "cli.h"
 #include "cli_import.h"
 
-void cli_graph_import_tuples(char* fl, int* pos, int s_id, tuple_t* tuple);
+void cli_graph_import_tuples(char* fl, int* pos, int s_id, tuple_t tuple);
 
 void
-cli_graph_import_vertex(char* fl, int* pos, graph_t* r_g)
+cli_graph_import_vertex(char* fl, int* pos, graph_t r_g)
 {
 	//collect id
 	char id[BUFSIZE];
@@ -25,13 +25,14 @@ cli_graph_import_vertex(char* fl, int* pos, graph_t* r_g)
 	vertex_t vertex = (vertex_t)malloc(sizeof(struct vertex));
 	vertex_init(vertex);
 	vertex->id = strtoll(id, NULL, 10);
+	vertex->tuple = (tuple_t)malloc(sizeof(struct tuple));
 
 	//collect tuple values if schema is specified
 	if(strcmp(s_id, "N") != 0)
-		cli_graph_import_tuples(fl, pos, strtol(s_id, NULL, 10), &(vertex->tuple));
+		cli_graph_import_tuples(fl, pos, strtol(s_id, NULL, 10), vertex->tuple);
 
-	graph_insert_vertex(*r_g, vertex);
+	graph_insert_vertex(r_g, vertex);
 
-	graph_print(*r_g, 1);
+	graph_print(r_g, 1);
 	printf("\n\n");
 }

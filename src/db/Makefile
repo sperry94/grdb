@@ -3,6 +3,8 @@ include ../Makefile.rules
 OBJS =	edge.o			\
 	enum.o			\
 	graph.o			\
+	graph_normalize.o	\
+	graph_denormalize.o	\
 	schema.o		\
 	string_pool.o		\
 	tuple.o			\

@@ -106,6 +106,23 @@ schema_init(schema_t *s)
 	memset(*s, 0, sizeof(struct schema));
 }
 
+void schema_copy(schema_t in, schema_t out)
+{
+	if(out->attrlist == NULL)
+		out->attrlist = (attribute_t)malloc(sizeof(struct attribute));
+
+	attribute_t in_attr, out_attr;
+	for(in_attr=in->attrlist, out_attr=out->attrlist; in_attr != NULL;
+		in_attr=in_attr->next, out_attr=out_attr->next)
+	{
+		schema_attribute_init(out_attr, in_attr->name, in_attr->bt, in_attr->e);
+		if(in_attr->next != NULL)
+			out_attr->next = (attribute_t)malloc(sizeof(struct attribute));
+		else
+			break;
+	}
+}
+
 int
 schema_size(schema_t s)
 {
@@ -117,6 +134,40 @@ schema_size(schema_t s)
 	for (attr = s->attrlist; attr != NULL; attr = attr->next)
 		acc += base_types_len[attr->bt];
 	return acc;
+}
+
+short
+schema_compare(schema_t s1, schema_t s2)
+{
+	for(attribute_t a1=s1->attrlist; a1 != NULL; a1=a1->next)
+	{
+		short found = 0;
+		for(attribute_t a2=s2->attrlist; a2 != NULL; a2=a2->next)
+		{
+			if(strcmp(a1->name, a2->name) == 0 && a1->bt == a2->bt)
+			{
+				found = 1;
+			}
+		}
+		if (!found)
+			return 0;
+	}
+
+	for(attribute_t a2=s2->attrlist; a2 != NULL; a2=a2->next)
+	{
+		short found = 0;
+		for(attribute_t a1=s1->attrlist; a1 != NULL; a1=a1->next)
+		{
+			if(strcmp(a1->name, a2->name) == 0 && a1->bt == a2->bt)
+			{
+				found = 1;
+			}
+		}
+		if (!found)
+			return 0;
+	}
+
+	return 1;
 }
 
 base_types_t

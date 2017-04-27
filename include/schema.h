@@ -50,7 +50,9 @@ void schema_attribute_insert(schema_t s, attribute_t attr);
 void schema_attribute_remove(schema_t s, attribute_t attr);
 
 void schema_init(schema_t *s);
+void schema_copy(schema_t in, schema_t out);
 int schema_size(schema_t s);
+short schema_compare(schema_t s1, schema_t s2);
 base_types_t schema_find_type_by_name(schema_t s, char *name);
 attribute_t schema_find_attr_by_name(schema_t s, char *name);
 void schema_print(schema_t s);

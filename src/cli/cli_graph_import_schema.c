@@ -6,7 +6,7 @@
 #include "cli_import.h"
 
 void
-cli_graph_import_schema_print_list()
+cli_graph_import_schema_print_list(schema_list_t* s_list)
 {
 	schema_list_t* s;
 	for(s = s_list; s != NULL; s = s->next)
@@ -17,26 +17,23 @@ cli_graph_import_schema_print_list()
 	}
 }
 
-schema_t*
+schema_t
 cli_graph_import_schema_find_by_id(int s_id)
 {
 	schema_list_t* s;
 	for(s = s_list; s != NULL; s = s->next)
 	{
 			if(s->s_id == s_id)
-				return &(s->s);
+				return s->s;
 	}
 	return NULL;
 }
 
 void
-cli_graph_import_schema_insert(schema_t schema, int s_id)
+cli_graph_import_schema_insert(schema_list_t* s_list, schema_t schema, int s_id)
 {
-	if(s_list == NULL)
+	if(s_list->s == NULL)
 	{
-		s_list = (schema_list_t*)malloc(sizeof(struct schema_list));
-		memset(s_list, 0, sizeof(struct schema_list));
-
 		s_list->s_id = s_id;
 		s_list->s = schema;
 		return;
@@ -95,5 +92,5 @@ cli_graph_import_schema(char* fl, int* pos)
 		nextarg(fl, pos, ITEM_SEP, n);
 	}
 
-	cli_graph_import_schema_insert(schema, strtol(id, NULL, 10));
+	cli_graph_import_schema_insert(s_list, schema, strtol(id, NULL, 10));
 }
