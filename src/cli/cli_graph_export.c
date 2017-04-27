@@ -3,6 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cli.h"
+#include "cli_import.h"
+
+void cli_graph_import_schema_print_list(schema_list_t* s_list);
+void cli_graph_import_schema_insert(schema_list_t* s_list, schema_t schema, int s_id);
+
 
 void
 cli_graph_export(char *cmdline, int *pos)
@@ -60,12 +65,49 @@ cli_graph_export(char *cmdline, int *pos)
   graph_print(cg, 1);
   printf("\n");
 
-  
+  int s_id = 0;
+  schema_list_t* s_list = (schema_list_t*)malloc(sizeof(struct schema_list));
+  memset(s_list, 0, sizeof(struct schema_list));
 
-  //loop through graphs
-    //add to running set of vertices and edges
-    //if vertex/edge not in set, add
-    //if vertex/edge in set, append tuple schema
+  // add schemas to list
+  for(vertex_t v=cg->v; v != NULL; v=v->next)
+  {
+    short found = 0;
+    for(schema_list_t* sl=s_list; sl != NULL && sl->s != NULL; sl=sl->next)
+    {
+      if(schema_compare(sl->s, v->tuple->s))
+      {
+        found = 1;
+        break;
+      }
+    }
+    if(!found)
+    {
+      cli_graph_import_schema_insert(s_list, v->tuple->s, s_id);
+      s_id++;
+    }
+  }
+
+  for(edge_t e=cg->e; e != NULL; e=e->next)
+  {
+    short found = 0;
+    for(schema_list_t* sl=s_list; sl != NULL && sl->s != NULL; sl=sl->next)
+    {
+      if(schema_compare(sl->s, e->tuple->s))
+      {
+        found = 1;
+        break;
+      }
+    }
+    if(!found)
+    {
+      cli_graph_import_schema_insert(s_list, e->tuple->s, s_id);
+      s_id++;
+    }
+  }
+
+  cli_graph_import_schema_print_list(s_list);
+
   //loop through running sets
     //make a running set of schema
     //if schema exists already (full compare), don't add
