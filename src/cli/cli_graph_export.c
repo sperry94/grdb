@@ -6,8 +6,16 @@
 #include "cli_import.h"
 
 void cli_graph_import_schema_print_list(schema_list_t* s_list);
-void cli_graph_import_schema_insert(schema_list_t* s_list, schema_t schema, int s_id);
+void cli_graph_import_schema_insert(schema_list_t* s_list,
+  schema_t schema, int s_id);
 
+void cli_graph_export_mappings_print_vtx(vtx_schema_map_list_t vtx_maps);
+void cli_graph_export_mappings_insert_vtx(vtx_schema_map_list_t vtx_maps,
+  vertexid_t v_id, int s_id);
+
+void cli_graph_export_mappings_print_edg(edg_schema_map_list_t edg_maps);
+void cli_graph_export_mappings_insert_edg(edg_schema_map_list_t edg_maps,
+  vertexid_t e_id1, vertexid_t e_id2, int s_id);
 
 void
 cli_graph_export(char *cmdline, int *pos)
@@ -69,6 +77,9 @@ cli_graph_export(char *cmdline, int *pos)
   schema_list_t* s_list = (schema_list_t*)malloc(sizeof(struct schema_list));
   memset(s_list, 0, sizeof(struct schema_list));
 
+  vtx_schema_map_list_t vtx_maps = NULL;
+  edg_schema_map_list_t edg_maps = NULL;
+
   // add schemas to list
   for(vertex_t v=cg->v; v != NULL; v=v->next)
   {
@@ -84,7 +95,20 @@ cli_graph_export(char *cmdline, int *pos)
     if(!found)
     {
       cli_graph_import_schema_insert(s_list, v->tuple->s, s_id);
-      s_id++;
+      if(vtx_maps == NULL)
+      {
+        vtx_maps = (vtx_schema_map_list_t)
+          malloc(sizeof(struct vtx_schema_map_list));
+        memset(vtx_maps, 0, sizeof(struct vtx_schema_map_list));
+
+        vtx_maps->id = v->id;
+        vtx_maps->s_id = s_id;
+      }
+      else
+      {
+        cli_graph_export_mappings_insert_vtx(vtx_maps, v->id, s_id);
+      }
+      ++s_id;
     }
   }
 
@@ -102,12 +126,29 @@ cli_graph_export(char *cmdline, int *pos)
     if(!found)
     {
       cli_graph_import_schema_insert(s_list, e->tuple->s, s_id);
-      s_id++;
+      if(edg_maps == NULL)
+      {
+        edg_maps = (edg_schema_map_list_t)
+          malloc(sizeof(struct edg_schema_map_list));
+        memset(edg_maps, 0, sizeof(struct edg_schema_map_list));
+
+        edg_maps->id1 = e->id1;
+        edg_maps->id2 = e->id2;
+        edg_maps->s_id = s_id;
+      }
+      else
+      {
+        cli_graph_export_mappings_insert_edg(edg_maps, e->id1, e->id2, s_id);
+      }
+      ++s_id;
     }
   }
 
   cli_graph_import_schema_print_list(s_list);
 
+  cli_graph_export_mappings_print_vtx(vtx_maps);
+
+  cli_graph_export_mappings_print_edg(edg_maps);
 
   for(schema_list_t* sl=s_list; sl != NULL && sl->s != NULL; sl=sl->next)
   {
@@ -119,7 +160,7 @@ cli_graph_export(char *cmdline, int *pos)
     }
     printf("\n");
   }
-  //print schema
+
   //print vertices
   //print edges
 }

@@ -26,8 +26,8 @@ struct edg_schema_map_list {
 };
 
 typedef struct schema_list schema_list_t;
-typedef struct vtx_schema_map_list vtx_schema_map_list_t;
-typedef struct edg_schema_map_list edg_schema_map_list_t;
+typedef struct vtx_schema_map_list* vtx_schema_map_list_t;
+typedef struct edg_schema_map_list* edg_schema_map_list_t;
 
 schema_list_t* s_list;
 
