@@ -21,6 +21,87 @@ void cli_graph_export_mappings_insert_edg(edg_schema_map_list_t edg_maps,
 edg_schema_map_list_t cli_graph_export_mappings_edg_lookup(edg_schema_map_list_t edg_maps,
   vertexid_t e_id1, vertexid_t e_id2);
 
+void cli_graph_export_print_tuples(tuple_t t)
+{
+  // code sourced from tuple_print function in tuple_print.c
+  for(attribute_t attr = t->s->attrlist; attr != NULL; attr = attr->next)
+  {
+    int offset = tuple_get_offset(t, attr->name);
+    short val;
+    int i;
+    float fval;
+    double dval;
+    char out[BUFSIZE];
+    if (offset >= 0) {
+      switch (attr->bt) {
+      case CHARACTER:
+        sprintf(out, "%c",
+          tuple_get_char(t->buf + offset));
+        break;
+
+      case VARCHAR:
+        sprintf(out, "\"%s\"",
+          (char *) (t->buf + offset));
+        break;
+
+      case BOOLEAN:
+        val = tuple_get_bool(t->buf + offset);
+        if (val == 0)
+          sprintf(out, "FALSE");
+        else
+          sprintf(out, "TRUE");
+        break;
+
+      case ENUM:
+        break;
+
+      case INTEGER:
+        i = tuple_get_int(t->buf + offset);
+        sprintf(out, "%d", i);
+        break;
+
+      case FLOAT:
+        fval = tuple_get_float(t->buf + offset);
+        sprintf(out, "%4.2f", fval);
+        break;
+
+      case DOUBLE:
+        dval = tuple_get_double(t->buf + offset);
+        sprintf(out, "%4.2f", dval);
+        break;
+
+      case DATE:
+        {
+          char s[base_types_len[DATE] + 1];
+
+          memset(s, 0,
+            base_types_len[DATE] + 1);
+          tuple_get_date(t->buf + offset, s);
+          sprintf(out, "%s", s);
+        }
+        break;
+
+      case TIME:
+        {
+          char s[base_types_len[TIME] + 1];
+
+          memset(s, 0,
+            base_types_len[TIME] + 1);
+          tuple_get_time(t->buf + offset, s);
+          sprintf(out, "%s", s);
+        }
+        break;
+
+      case BASE_TYPES_MAX:
+        break;
+      }
+    }
+    if(strlen(out) > 0)
+      printf(" %s:%s", attr->name, out);
+  }
+  printf("\n");
+}
+
 void
 cli_graph_export(char *cmdline, int *pos)
 {
@@ -37,9 +118,6 @@ cli_graph_export(char *cmdline, int *pos)
       nv->prev = NULL;
       nv->next = NULL;
 
-      schema_print(nv->tuple->s);
-      printf("\n");
-
       vertex_t gv = graph_find_vertex_by_id(cg, nv->id);
       if(gv == NULL)
       {
@@ -47,6 +125,7 @@ cli_graph_export(char *cmdline, int *pos)
       }
       else
       {
+        //copy tuple data
         schema_attribute_insert(gv->tuple->s, nv->tuple->s->attrlist);
       }
     }
@@ -59,9 +138,6 @@ cli_graph_export(char *cmdline, int *pos)
       ne->prev = NULL;
       ne->next = NULL;
 
-      schema_print(ne->tuple->s);
-      printf("\n");
-
       edge_t ge = graph_find_edge_by_ids(cg, ne->id1, ne->id2);
       if(ge == NULL)
       {
@@ -69,13 +145,11 @@ cli_graph_export(char *cmdline, int *pos)
       }
       else
       {
+        //copy tuple data
         schema_attribute_insert(ge->tuple->s, ne->tuple->s->attrlist);
       }
     }
   }
-
-  graph_print(cg, 1);
-  printf("\n");
 
   int s_id = 0;
   schema_list_t* s_list = (schema_list_t*)malloc(sizeof(struct schema_list));
@@ -169,17 +243,17 @@ cli_graph_export(char *cmdline, int *pos)
   {
     vtx_schema_map_list_t vm =
       cli_graph_export_mappings_vtx_lookup(vtx_maps, v->id);
-    printf("V %llu %d\n", v->id, vm->s_id);
+    printf("V %llu %d", v->id, vm->s_id);
 
-    // print tupless
+    cli_graph_export_print_tuples(v->tuple);
   }
 
   for(edge_t e=cg->e; e != NULL; e=e->next)
   {
     edg_schema_map_list_t em =
       cli_graph_export_mappings_edg_lookup(edg_maps, e->id1, e->id2);
-    printf("E %llu:%llu %d\n", e->id1, e->id2, em->s_id);
+    printf("E %llu:%llu %d", e->id1, e->id2, em->s_id);
 
-    // print tuples
+    cli_graph_export_print_tuples(e->tuple);
   }
 }
