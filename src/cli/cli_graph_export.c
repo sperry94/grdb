@@ -12,10 +12,14 @@ void cli_graph_import_schema_insert(schema_list_t* s_list,
 void cli_graph_export_mappings_print_vtx(vtx_schema_map_list_t vtx_maps);
 void cli_graph_export_mappings_insert_vtx(vtx_schema_map_list_t vtx_maps,
   vertexid_t v_id, int s_id);
+vtx_schema_map_list_t cli_graph_export_mappings_vtx_lookup(vtx_schema_map_list_t vtx_maps,
+  vertexid_t v_id);
 
 void cli_graph_export_mappings_print_edg(edg_schema_map_list_t edg_maps);
 void cli_graph_export_mappings_insert_edg(edg_schema_map_list_t edg_maps,
   vertexid_t e_id1, vertexid_t e_id2, int s_id);
+edg_schema_map_list_t cli_graph_export_mappings_edg_lookup(edg_schema_map_list_t edg_maps,
+  vertexid_t e_id1, vertexid_t e_id2);
 
 void
 cli_graph_export(char *cmdline, int *pos)
@@ -161,6 +165,21 @@ cli_graph_export(char *cmdline, int *pos)
     printf("\n");
   }
 
-  //print vertices
-  //print edges
+  for(vertex_t v=cg->v; v != NULL; v=v->next)
+  {
+    vtx_schema_map_list_t vm =
+      cli_graph_export_mappings_vtx_lookup(vtx_maps, v->id);
+    printf("V %llu %d\n", v->id, vm->s_id);
+
+    // print tupless
+  }
+
+  for(edge_t e=cg->e; e != NULL; e=e->next)
+  {
+    edg_schema_map_list_t em =
+      cli_graph_export_mappings_edg_lookup(edg_maps, e->id1, e->id2);
+    printf("E %llu:%llu %d\n", e->id1, e->id2, em->s_id);
+
+    // print tuples
+  }
 }

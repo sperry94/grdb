@@ -23,6 +23,32 @@ cli_graph_export_mappings_print_edg(edg_schema_map_list_t edg_maps)
   }
 }
 
+vtx_schema_map_list_t
+cli_graph_export_mappings_vtx_lookup(vtx_schema_map_list_t vtx_maps,
+  vertexid_t v_id)
+{
+  for(vtx_schema_map_list_t vm=vtx_maps; vm != NULL; vm=vm->next)
+  {
+    if(vm->id == v_id)
+      return vm;
+  }
+
+  return NULL;
+}
+
+edg_schema_map_list_t
+cli_graph_export_mappings_edg_lookup(edg_schema_map_list_t edg_maps,
+  vertexid_t e_id1, vertexid_t e_id2)
+{
+  for(edg_schema_map_list_t em=edg_maps; em != NULL; em=em->next)
+  {
+    if(em->id1 == e_id1 && em->id2 == e_id2)
+      return em;
+  }
+
+  return NULL;
+}
+
 void
 cli_graph_export_mappings_insert_vtx(vtx_schema_map_list_t vtx_maps,
   vertexid_t v_id, int s_id)
