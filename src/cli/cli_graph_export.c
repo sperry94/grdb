@@ -108,10 +108,17 @@ cli_graph_export(char *cmdline, int *pos)
 
   cli_graph_import_schema_print_list(s_list);
 
-  //loop through running sets
-    //make a running set of schema
-    //if schema exists already (full compare), don't add
 
+  for(schema_list_t* sl=s_list; sl != NULL && sl->s != NULL; sl=sl->next)
+  {
+    printf("S %d", sl->s_id);
+
+    for(attribute_t a=sl->s->attrlist; a != NULL; a=a->next)
+    {
+      printf(" %s:%s", base_types_str[a->bt], a->name);
+    }
+    printf("\n");
+  }
   //print schema
   //print vertices
   //print edges
