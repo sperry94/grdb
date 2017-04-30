@@ -54,4 +54,6 @@ cli_export(char *cmdline, int *pos)
   cli_export_edges(cg, edg_maps, fd);
 
   fclose(fd);
+
+  // deep free graph, vertex maps, edge maps
 }

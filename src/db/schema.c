@@ -205,6 +205,32 @@ schema_find_attr_by_name(schema_t s, char *name)
 }
 
 void
+schema_remove_union(schema_t s1, schema_t s2, schema_t u_s)
+{
+	for(attribute_t a1=s1->attrlist; a1 != NULL; a1=a1->next)
+	{
+		attribute_t a2 = schema_find_attr_by_name(s2, a1->name);
+		if(a2 != NULL  && a1->bt == a2->bt) {
+			a1->next = NULL;
+			schema_attribute_insert(u_s, a1);
+			schema_attribute_remove(s1, a1);
+			schema_attribute_remove(s2, a2);
+		}
+	}
+
+	for(attribute_t a2=s2->attrlist; a2 != NULL; a2=a2->next)
+	{
+		attribute_t a1 = schema_find_attr_by_name(s1, a2->name);
+		if(a1 != NULL && a1->bt == a2->bt) {
+			a2->next = NULL;
+			schema_attribute_insert(u_s, a2);
+			schema_attribute_remove(s1, a1);
+			schema_attribute_remove(s2, a2);
+		}
+	}
+}
+
+void
 schema_print(schema_t s)
 {
 	attribute_t attr;

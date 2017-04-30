@@ -18,8 +18,7 @@ cli_export_edges(graph_t g, e_s_map_t edg_maps, FILE* out)
     char el[BUFSIZE];
     memset(el, 0, BUFSIZE);
 
-    e_s_map_t em =
-      cli_export_map_find_edg(edg_maps, e->id1, e->id2);
+    e_s_map_t em = cli_export_map_find_edg(edg_maps, e->id1, e->id2);
     fprintf(out, "E %llu:%llu %d", e->id1, e->id2, em->s_id);
 
     // tuple value export not supported

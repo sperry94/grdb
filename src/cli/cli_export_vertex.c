@@ -15,8 +15,7 @@ cli_export_vertices(graph_t g, v_s_map_t vtx_maps, FILE* out)
 {
   for(vertex_t v=g->v; v != NULL; v=v->next)
   {
-    v_s_map_t vm =
-      cli_export_map_find_vtx(vtx_maps, v->id);
+    v_s_map_t vm = cli_export_map_find_vtx(vtx_maps, v->id);
     fprintf(out, "V %llu %d", v->id, vm->s_id);
 
     // tuple value export not supported
