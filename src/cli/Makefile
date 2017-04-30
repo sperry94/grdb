@@ -6,7 +6,12 @@ OBJS =	bufdump.o 			\
 	cli.o				\
 	cli_enum.o			\
 	cli_export.o		\
+	cli_export_edge.o		\
+	cli_export_graph.o		\
 	cli_export_mappings.o		\
+	cli_export_schema.o		\
+	cli_export_tuple.o		\
+	cli_export_vertex.o		\
 	cli_graph.o			\
 	cli_graph_edge.o		\
 	cli_graph_new.o			\

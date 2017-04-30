@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "graph.h"
 
@@ -27,6 +28,49 @@ graph_insert_vertex(graph_t g, vertex_t v)
 	for (w = g->v; w->next != NULL; w = w->next);
 	w->next = v;
 	v->prev = w;
+}
+
+vertex_t
+graph_find_neighbor_ids(graph_t g, vertexid_t id)
+{
+	vertex_t v = NULL;
+	vertex_t rv = NULL;
+
+	for(edge_t e=g->e; e != NULL; e=e->next)
+	{
+		short found = 0;
+		vertexid_t n_id;
+
+		// if id is one of the edge ids, record the other
+		if(e->id1 == id) {
+			n_id = e->id2;
+			found = 1;
+		}
+		else if(e->id2 == id) {
+			n_id = e->id1;
+			found = 1;
+		}
+
+		// add neighbor if applicable
+		if(found) {
+			if(v == NULL)
+			{
+				v = (vertex_t)malloc(sizeof(struct vertex));
+				memset(v, 0, sizeof(struct vertex));
+				rv = v;
+			}
+			else
+			{
+				v->next = (vertex_t)malloc(sizeof(struct vertex));
+				memset(v->next, 0, sizeof(struct vertex));
+				rv = v->next;
+			}
+
+			rv->id = n_id;
+		}
+	}
+
+	return v;
 }
 
 vertex_t

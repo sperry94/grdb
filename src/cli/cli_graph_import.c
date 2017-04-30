@@ -74,7 +74,16 @@ cli_graph_import(char* cmdline, int* pos)
 
 	cli_graph_import_schema_print_list(s_list);
 
-	/*graph_t norm = (graph_t)malloc(sizeof(struct graph));
-	graph_init(norm);
-	graph_normalize(r_g, norm);*/
+	for(vertex_t v=r_g->v; v != NULL; v=v->next)
+	{
+		vertex_t ns = graph_find_neighbor_ids(r_g, v->id);
+
+		printf("Neighbors of vertex %llu:", v->id);
+		for(vertex_t n=ns; n != NULL; n=n->next)
+		{
+			printf(" %llu", n->id);
+		}
+		printf("\n");
+
+	}
 }

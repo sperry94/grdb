@@ -14,6 +14,7 @@ cli_graph_import_tuples(char* fl, int* pos, int s_id, tuple_t tuple)
 
 	tuple_init(tuple, s);
 
+	/* Tuple value import not supported
 	// collect field name
 	char n[ATTR_NAME_MAXLEN];
 	memset(n, 0, ATTR_NAME_MAXLEN);
@@ -49,4 +50,5 @@ cli_graph_import_tuples(char* fl, int* pos, int s_id, tuple_t tuple)
 		memset(v, 0, BUFSIZE);
 		nextarg(fl, pos, ITEM_SEP, v);
 	}
+	*/
 }

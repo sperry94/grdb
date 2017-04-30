@@ -28,7 +28,7 @@ cli_export_map_find_vtx(v_s_map_t vtx_maps,
 }
 
 void
-cli_export_mappings_insert_vtx(v_s_map_t vtx_maps,
+cli_export_map_insert_vtx(v_s_map_t vtx_maps,
   vertexid_t v_id, int s_id)
 {
   v_s_map_t vm;
@@ -64,7 +64,7 @@ cli_export_map_find_edg(e_s_map_t edg_maps,
 }
 
 void
-cli_export_mappings_insert_edg(e_s_map_t edg_maps,
+cli_export_map_insert_edg(e_s_map_t edg_maps,
   vertexid_t e_id1, vertexid_t e_id2, int s_id)
 {
   e_s_map_t em;
