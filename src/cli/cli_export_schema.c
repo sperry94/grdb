@@ -5,8 +5,8 @@
 #include "cli.h"
 #include "cli_nf.h"
 
-void cli_import_schema_print_list(schema_list_t s_list);
-void cli_import_schema_insert(schema_list_t s_list,
+void cli_import_schema_print_list(s_list_t s_list);
+void cli_import_schema_insert(s_list_t s_list,
   schema_t schema, int s_id);
 
 void cli_export_map_insert_vtx(v_s_map_t vtx_maps,
@@ -16,9 +16,9 @@ void cli_export_map_insert_edg(e_s_map_t edg_maps,
   vertexid_t e_id1, vertexid_t e_id2, int s_id);
 
 void
-cli_export_schemas(schema_list_t s_list, FILE* out)
+cli_export_schemas(s_list_t s_list, FILE* out)
 {
-  for(schema_list_t sl=s_list; sl != NULL && sl->s != NULL; sl=sl->next)
+  for(s_list_t sl=s_list; sl != NULL && sl->s != NULL; sl=sl->next)
   {
     fprintf(out, "S %d", sl->s_id);
 
@@ -31,13 +31,13 @@ cli_export_schemas(schema_list_t s_list, FILE* out)
 }
 
 v_s_map_t
-cli_export_collect_vtx_schemas(graph_t g, schema_list_t s_list, int* s_id)
+cli_export_collect_vtx_schemas(graph_t g, s_list_t s_list, int* s_id)
 {
   v_s_map_t vtx_maps = NULL;
   for(vertex_t v=g->v; v != NULL; v=v->next)
   {
     short found = 0;
-    for(schema_list_t sl=s_list; sl != NULL && sl->s != NULL; sl=sl->next)
+    for(s_list_t sl=s_list; sl != NULL && sl->s != NULL; sl=sl->next)
     {
       if(schema_compare(sl->s, v->tuple->s))
       {
@@ -69,13 +69,13 @@ cli_export_collect_vtx_schemas(graph_t g, schema_list_t s_list, int* s_id)
 }
 
 e_s_map_t
-cli_export_collect_edg_schemas(graph_t g, schema_list_t s_list, int* s_id)
+cli_export_collect_edg_schemas(graph_t g, s_list_t s_list, int* s_id)
 {
   e_s_map_t edg_maps = NULL;
   for(edge_t e=g->e; e != NULL; e=e->next)
   {
     short found = 0;
-    for(schema_list_t sl=s_list; sl != NULL && sl->s != NULL; sl=sl->next)
+    for(s_list_t sl=s_list; sl != NULL && sl->s != NULL; sl=sl->next)
     {
       if(schema_compare(sl->s, e->tuple->s))
       {

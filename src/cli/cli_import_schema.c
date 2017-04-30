@@ -6,9 +6,9 @@
 #include "cli_nf.h"
 
 void
-cli_import_schema_print_list(schema_list_t s_list)
+cli_import_schema_print_list(s_list_t s_list)
 {
-	schema_list_t s;
+	s_list_t s;
 	for(s = s_list; s != NULL; s = s->next)
 	{
 		printf("Schema %d: ", s->s_id);
@@ -20,7 +20,7 @@ cli_import_schema_print_list(schema_list_t s_list)
 schema_t
 cli_import_schema_find_by_id(int s_id)
 {
-	schema_list_t s;
+	s_list_t s;
 	for(s = s_list; s != NULL; s = s->next)
 	{
 			if(s->s_id == s_id)
@@ -30,7 +30,7 @@ cli_import_schema_find_by_id(int s_id)
 }
 
 void
-cli_import_schema_insert(schema_list_t s_list, schema_t schema, int s_id)
+cli_import_schema_insert(s_list_t s_list, schema_t schema, int s_id)
 {
 	if(s_list->s == NULL)
 	{
@@ -39,11 +39,11 @@ cli_import_schema_insert(schema_list_t s_list, schema_t schema, int s_id)
 		return;
 	}
 
-	schema_list_t end;
+	s_list_t end;
 	for(end = s_list; end->next != NULL; end = end->next);
 
-	end->next = (schema_list_t)malloc(sizeof(struct schema_list));
-	memset(end->next, 0, sizeof(struct schema_list));
+	end->next = (s_list_t)malloc(sizeof(struct s_list));
+	memset(end->next, 0, sizeof(struct s_list));
 
 	end->next->s_id = s_id;
 	end->next->s = schema;
@@ -94,8 +94,8 @@ cli_import_schema(char* fl, int* pos)
 
 	if(s_list == NULL)
 	{
-		s_list = (schema_list_t)malloc(sizeof(struct schema_list));
-		memset(s_list, 0, sizeof(struct schema_list));
+		s_list = (s_list_t)malloc(sizeof(struct s_list));
+		memset(s_list, 0, sizeof(struct s_list));
 
 		s_list->s_id = strtol(id, NULL, 10);
 		s_list->s = schema;

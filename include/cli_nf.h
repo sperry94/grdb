@@ -7,10 +7,10 @@
 #define ITEM_SEP ":; \n"
 
 /* Schema list for import */
-struct schema_list {
+struct s_list {
 	int s_id;
 	schema_t s;
-	struct schema_list* next;
+	struct s_list* next;
 };
 
 struct v_s_map {
@@ -25,10 +25,10 @@ struct e_s_map {
 	struct e_s_map* next;
 };
 
-typedef struct schema_list* schema_list_t;
+typedef struct s_list* s_list_t;
 typedef struct v_s_map* v_s_map_t;
 typedef struct e_s_map* e_s_map_t;
 
-schema_list_t s_list;
+s_list_t s_list;
 
 #endif
