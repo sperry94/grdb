@@ -22,6 +22,8 @@ cli_export_edges(graph_t g, e_s_map_t edg_maps, FILE* out)
       cli_export_map_find_edg(edg_maps, e->id1, e->id2);
     fprintf(out, "E %llu:%llu %d", e->id1, e->id2, em->s_id);
 
-    cli_export_print_tuples(e->tuple, out);
+    // tuple value export not supported
+    //cli_export_print_tuples(e->tuple, out);
+    fprintf(out, "\n");
   }
 }

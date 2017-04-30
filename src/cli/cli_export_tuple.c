@@ -85,5 +85,4 @@ cli_export_print_tuples(tuple_t t, FILE* out)
     if(strlen(out_val) > 0)
       fprintf(out, " %s:%s", attr->name, out_val);
   }
-  fprintf(out, "\n");
 }

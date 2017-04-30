@@ -19,6 +19,8 @@ cli_export_vertices(graph_t g, v_s_map_t vtx_maps, FILE* out)
       cli_export_map_find_vtx(vtx_maps, v->id);
     fprintf(out, "V %llu %d", v->id, vm->s_id);
 
-    cli_export_print_tuples(v->tuple, out);
+    // tuple value export not supported
+    //cli_export_print_tuples(v->tuple, out);
+    fprintf(out, "\n");
   }
 }

@@ -24,6 +24,7 @@ OBJS =	bufdump.o 			\
 	cli_graph_schema_add.o		\
 	cli_graph_tuple.o		\
 	cli_graph_update_tuples.o	\
+	cli_nf_schema.o		\
 	lex.o				\
 	main.o
 

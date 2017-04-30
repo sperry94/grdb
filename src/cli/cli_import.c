@@ -5,17 +5,17 @@
 #include "cli.h"
 #include "cli_nf.h"
 
-void cli_import_edge(char* fl, int* pos, graph_t r_g);
+void cli_import_edge(char* fl, int* pos, graph_t r_g, s_list_t s_list);
 
-void cli_import_schema(char* fl, int* pos);
-void cli_import_schema_print_list(s_list_t s_list);
+void cli_import_schema(char* fl, int* pos, s_list_t s_list);
+void cli_nf_schema_print_list(s_list_t s_list);
 
-void cli_import_vertex(char* fl, int* pos, graph_t r_g);
+void cli_import_vertex(char* fl, int* pos, graph_t r_g, s_list_t s_list);
 
 void graph_normalize(graph_t in, graph_t out);
 
 void
-cli_import_line(char* fl, graph_t r_g)
+cli_import_line(char* fl, graph_t r_g, s_list_t s_list)
 {
 	char t[BUFSIZE];
 	memset(t, 0, BUFSIZE);
@@ -24,11 +24,11 @@ cli_import_line(char* fl, graph_t r_g)
 	nextarg(fl, &pos, DEF_SEP, t);
 
 	if(strcmp(t, "S") == 0)
-		cli_import_schema(fl, &pos);
+		cli_import_schema(fl, &pos, s_list);
 	else if(strcmp(t, "V") == 0)
-		cli_import_vertex(fl, &pos, r_g);
+		cli_import_vertex(fl, &pos, r_g, s_list);
 	else if(strcmp(t, "E") == 0)
-		cli_import_edge(fl, &pos, r_g);
+		cli_import_edge(fl, &pos, r_g, s_list);
 	else
 	{
 		printf("Unexpected type\n");
@@ -58,12 +58,15 @@ cli_import(char* cmdline, int* pos)
 	graph_t r_g = (graph_t)malloc(sizeof(struct graph));
 	memset(r_g, 0, sizeof(struct graph));
 
+	s_list_t s_list =  (s_list_t)malloc(sizeof(struct s_list));
+	memset(s_list, 0, sizeof(struct s_list));
+
 	char fl[BUFSIZE];
 	memset(fl, 0, BUFSIZE);
 
 	while(fgets(fl, BUFSIZE, fd) != NULL)
 	{
-		cli_import_line(fl, r_g);
+		cli_import_line(fl, r_g, s_list);
 		memset(fl, 0, BUFSIZE);
 	}
 
@@ -75,7 +78,7 @@ cli_import(char* cmdline, int* pos)
 	graph_print(r_g, 1);
 	printf("\n");
 
-	cli_import_schema_print_list(s_list);
+	cli_nf_schema_print_list(s_list);
 
 	for(vertex_t v=r_g->v; v != NULL; v=v->next)
 	{

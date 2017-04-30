@@ -29,6 +29,4 @@ typedef struct s_list* s_list_t;
 typedef struct v_s_map* v_s_map_t;
 typedef struct e_s_map* e_s_map_t;
 
-s_list_t s_list;
-
 #endif

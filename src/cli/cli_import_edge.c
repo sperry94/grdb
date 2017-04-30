@@ -5,10 +5,10 @@
 #include "cli.h"
 #include "cli_nf.h"
 
-void cli_import_tuples(char* fl, int* pos, int s_id, tuple_t tuple);
+void cli_import_tuples(char* fl, int* pos, tuple_t tuple, s_list_t s_list, int s_id);
 
 void
-cli_import_edge(char* fl, int* pos, graph_t r_g)
+cli_import_edge(char* fl, int* pos, graph_t r_g, s_list_t s_list)
 {
 	//collect id1
 	char id1[BUFSIZE];
@@ -33,7 +33,7 @@ cli_import_edge(char* fl, int* pos, graph_t r_g)
 
 	//collect tuple values if schema is specified
 	if(strcmp(s_id, "N") != 0)
-		cli_import_tuples(fl, pos, strtol(s_id, NULL, 10), edge->tuple);
+		cli_import_tuples(fl, pos, edge->tuple, s_list, strtol(s_id, NULL, 10));
 
 	graph_insert_edge(r_g, edge);
 }
