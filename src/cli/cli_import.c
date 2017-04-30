@@ -14,8 +14,6 @@ void cli_import_vertex(char* fl, int* pos, graph_t r_g, s_list_t s_list);
 
 void graph_normalize(graph_t in, graph_t out);
 
-void schema_remove_union(schema_t s1, schema_t s2, schema_t u_s);
-
 void
 cli_import_line(char* fl, graph_t r_g, s_list_t s_list)
 {
@@ -79,27 +77,4 @@ cli_import(char* cmdline, int* pos)
 
 	graph_print(r_g, 1);
 	printf("\n");
-
-	for(vertex_t v=r_g->v; v != NULL; v=v->next)
-	{
-		vertex_t ns = graph_find_neighbor_ids(r_g, v->id);
-
-		for(vertex_t n=ns; n != NULL; n=n->next)
-		{
-			schema_t n_s_u = (schema_t)malloc(sizeof(struct schema));
-			memset(n_s_u, 0, sizeof(struct schema));
-
-			schema_remove_union(v->tuple->s, n->tuple->s, n_s_u);
-
-			schema_print(v->tuple->s);
-			printf("\n");
-			schema_print(n->tuple->s);
-			printf("\n");
-			schema_print(n_s_u);
-			printf("\n");
-			// handle the neighbors
-		}
-
-		//deep free running graph, schema list, neighbor id list
-	}
 }
