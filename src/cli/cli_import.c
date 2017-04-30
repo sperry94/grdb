@@ -5,17 +5,17 @@
 #include "cli.h"
 #include "cli_nf.h"
 
-void cli_graph_import_edge(char* fl, int* pos, graph_t r_g);
+void cli_import_edge(char* fl, int* pos, graph_t r_g);
 
-void cli_graph_import_schema(char* fl, int* pos);
-void cli_graph_import_schema_print_list(schema_list_t* s_list);
+void cli_import_schema(char* fl, int* pos);
+void cli_import_schema_print_list(schema_list_t* s_list);
 
-void cli_graph_import_vertex(char* fl, int* pos, graph_t r_g);
+void cli_import_vertex(char* fl, int* pos, graph_t r_g);
 
 void graph_normalize(graph_t in, graph_t out);
 
 void
-cli_graph_import_line(char* fl, graph_t r_g)
+cli_import_line(char* fl, graph_t r_g)
 {
 	char t[BUFSIZE];
 	memset(t, 0, BUFSIZE);
@@ -24,11 +24,11 @@ cli_graph_import_line(char* fl, graph_t r_g)
 	nextarg(fl, &pos, DEF_SEP, t);
 
 	if(strcmp(t, "S") == 0)
-		cli_graph_import_schema(fl, &pos);
+		cli_import_schema(fl, &pos);
 	else if(strcmp(t, "V") == 0)
-		cli_graph_import_vertex(fl, &pos, r_g);
+		cli_import_vertex(fl, &pos, r_g);
 	else if(strcmp(t, "E") == 0)
-		cli_graph_import_edge(fl, &pos, r_g);
+		cli_import_edge(fl, &pos, r_g);
 	else
 	{
 		printf("Unexpected type\n");
@@ -36,14 +36,17 @@ cli_graph_import_line(char* fl, graph_t r_g)
 }
 
 void
-cli_graph_import(char* cmdline, int* pos)
+cli_import(char* cmdline, int* pos)
 {
 	char fn[BUFSIZE];
-
 	memset(fn, 0, BUFSIZE);
 	nextarg(cmdline, pos, DEF_SEP, fn);
 
-	printf("%s:\n", fn);
+	char* ext = strstr(fn, ".grdb");
+  if(ext == NULL || strlen(ext) != 5) {
+      printf("Import file must have extension .grdb\n");
+      return;
+  }
 
 	FILE* fd;
 	if((fd = fopen(fn, "r")) == NULL)
@@ -60,7 +63,7 @@ cli_graph_import(char* cmdline, int* pos)
 
 	while(fgets(fl, BUFSIZE, fd) != NULL)
 	{
-		cli_graph_import_line(fl, r_g);
+		cli_import_line(fl, r_g);
 		memset(fl, 0, BUFSIZE);
 	}
 
@@ -72,7 +75,7 @@ cli_graph_import(char* cmdline, int* pos)
 	graph_print(r_g, 1);
 	printf("\n");
 
-	cli_graph_import_schema_print_list(s_list);
+	cli_import_schema_print_list(s_list);
 
 	for(vertex_t v=r_g->v; v != NULL; v=v->next)
 	{

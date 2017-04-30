@@ -6,7 +6,7 @@
 #include "cli_nf.h"
 
 void
-cli_graph_import_schema_print_list(schema_list_t* s_list)
+cli_import_schema_print_list(schema_list_t* s_list)
 {
 	schema_list_t* s;
 	for(s = s_list; s != NULL; s = s->next)
@@ -18,7 +18,7 @@ cli_graph_import_schema_print_list(schema_list_t* s_list)
 }
 
 schema_t
-cli_graph_import_schema_find_by_id(int s_id)
+cli_import_schema_find_by_id(int s_id)
 {
 	schema_list_t* s;
 	for(s = s_list; s != NULL; s = s->next)
@@ -30,7 +30,7 @@ cli_graph_import_schema_find_by_id(int s_id)
 }
 
 void
-cli_graph_import_schema_insert(schema_list_t* s_list, schema_t schema, int s_id)
+cli_import_schema_insert(schema_list_t* s_list, schema_t schema, int s_id)
 {
 	if(s_list->s == NULL)
 	{
@@ -50,7 +50,7 @@ cli_graph_import_schema_insert(schema_list_t* s_list, schema_t schema, int s_id)
 }
 
 void
-cli_graph_import_schema(char* fl, int* pos)
+cli_import_schema(char* fl, int* pos)
 {
 	//collect id
 	char id[BUFSIZE];
@@ -102,5 +102,5 @@ cli_graph_import_schema(char* fl, int* pos)
 		return;
 	}
 
-	cli_graph_import_schema_insert(s_list, schema, strtol(id, NULL, 10));
+	cli_import_schema_insert(s_list, schema, strtol(id, NULL, 10));
 }

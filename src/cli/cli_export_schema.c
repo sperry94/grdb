@@ -5,13 +5,13 @@
 #include "cli.h"
 #include "cli_nf.h"
 
-void cli_graph_import_schema_print_list(schema_list_t* s_list);
-void cli_graph_import_schema_insert(schema_list_t* s_list,
+void cli_import_schema_print_list(schema_list_t* s_list);
+void cli_import_schema_insert(schema_list_t* s_list,
   schema_t schema, int s_id);
 
 void cli_export_map_insert_vtx(v_s_map_t vtx_maps,
   vertexid_t v_id, int s_id);
-  
+
 void cli_export_map_insert_edg(e_s_map_t edg_maps,
   vertexid_t e_id1, vertexid_t e_id2, int s_id);
 
@@ -47,7 +47,7 @@ cli_export_collect_vtx_schemas(graph_t g, schema_list_t* s_list, int* s_id)
     }
     if(!found)
     {
-      cli_graph_import_schema_insert(s_list, v->tuple->s, *s_id);
+      cli_import_schema_insert(s_list, v->tuple->s, *s_id);
       if(vtx_maps == NULL)
       {
         vtx_maps = (v_s_map_t)
@@ -85,7 +85,7 @@ cli_export_collect_edg_schemas(graph_t g, schema_list_t* s_list, int* s_id)
     }
     if(!found)
     {
-      cli_graph_import_schema_insert(s_list, e->tuple->s, *s_id);
+      cli_import_schema_insert(s_list, e->tuple->s, *s_id);
       if(edg_maps == NULL)
       {
         edg_maps = (e_s_map_t)

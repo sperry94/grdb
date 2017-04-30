@@ -5,12 +5,12 @@
 #include "cli.h"
 #include "cli_nf.h"
 
-schema_t cli_graph_import_schema_find_by_id(int s_id);
+schema_t cli_import_schema_find_by_id(int s_id);
 
 void
-cli_graph_import_tuples(char* fl, int* pos, int s_id, tuple_t tuple)
+cli_import_tuples(char* fl, int* pos, int s_id, tuple_t tuple)
 {
-	schema_t s = cli_graph_import_schema_find_by_id(s_id);
+	schema_t s = cli_import_schema_find_by_id(s_id);
 
 	tuple_init(tuple, s);
 

@@ -17,6 +17,16 @@ void cli_export_collect_full_graph(graph_t cg);
 void
 cli_export(char *cmdline, int *pos)
 {
+  char fn[BUFSIZE];
+	memset(fn, 0, BUFSIZE);
+	nextarg(cmdline, pos, DEF_SEP, fn);
+
+  char* ext = strstr(fn, ".grdb");
+  if(ext == NULL || strlen(ext) != 5) {
+      printf("Export file must have extension .grdb\n");
+      return;
+  }
+
   graph_t cg = (graph_t)malloc(sizeof(struct graph));
   graph_init(cg);
 
@@ -28,10 +38,6 @@ cli_export(char *cmdline, int *pos)
 
   v_s_map_t vtx_maps = cli_export_collect_vtx_schemas(cg, s_list, &s_id);
   e_s_map_t edg_maps = cli_export_collect_edg_schemas(cg, s_list, &s_id);
-
-  char fn[BUFSIZE];
-	memset(fn, 0, BUFSIZE);
-	nextarg(cmdline, pos, DEF_SEP, fn);
 
   FILE* fd;
 
