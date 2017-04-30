@@ -8,7 +8,7 @@
 void cli_import_edge(char* fl, int* pos, graph_t r_g);
 
 void cli_import_schema(char* fl, int* pos);
-void cli_import_schema_print_list(schema_list_t* s_list);
+void cli_import_schema_print_list(schema_list_t s_list);
 
 void cli_import_vertex(char* fl, int* pos, graph_t r_g);
 

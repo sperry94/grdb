@@ -64,7 +64,4 @@ edge_t graph_find_edge_by_ids(graph_t g, vertexid_t id1, vertexid_t id2);
 void graph_insert_edge(graph_t g, edge_t e);
 void graph_print(graph_t g, int with_tuples);
 
-void graph_normalize(graph_t in, graph_t out);
-void graph_denormalize(graph_t in, graph_t out);
-
 #endif

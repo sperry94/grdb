@@ -25,10 +25,10 @@ struct e_s_map {
 	struct e_s_map* next;
 };
 
-typedef struct schema_list schema_list_t;
+typedef struct schema_list* schema_list_t;
 typedef struct v_s_map* v_s_map_t;
 typedef struct e_s_map* e_s_map_t;
 
-schema_list_t* s_list;
+schema_list_t s_list;
 
 #endif
